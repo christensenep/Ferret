@@ -233,9 +233,11 @@ function checkDiskUsage {
 }
 
 function checkUserLogIPs {
-USER=${USER:0:8} 
 YLOG=/var/log/wtmp.1
-( last -i | grep $USER && last -if $YLOG | grep $USER ) | awk '{print $3}' | sort | uniq -c | sort -rn
+for u in `cat /etc/passwd | cut -d: -f1`; do
+  echo 'User' $u ':'
+  ( last -i | grep ${u:0:8} && last -if $YLOG | grep ${u:0:8} ) | awk '{print $3}' | sort | uniq -c | sort -rn;
+done
 }
 
 
@@ -402,7 +404,7 @@ then # - i  domain
 	listIPs
 elif [ "$index" = "2" ] && [ "$ARGCHK" = "1" ] && [ "$UIP" = "1" ]
 then # -u 
-	echo "List of ips logged by user $USER:"
+	echo "List of ips logged by each user:"
 	checkUserLogIPs
 elif [ "$index" = "3" ] && [ "$ARGCHK" = "1" ] && [ "$WEB" = "1" ] && [ "$ALOG" = "1" ]
 then # -w domain
