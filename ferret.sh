@@ -235,7 +235,7 @@ function checkDiskUsage {
 function checkUserLogIPs {
 YLOG=/var/log/wtmp.1
 for u in `cat /etc/passwd | cut -d: -f1`; do
-  echo 'User' $u ':'
+  echo "User $u:"
   ( last -i | grep ${u:0:8} && last -if $YLOG | grep ${u:0:8} ) | awk '{print $3}' | sort | uniq -c | sort -rn;
 done
 }
